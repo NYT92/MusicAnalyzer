@@ -18,7 +18,7 @@ A web-based application that analyzes audio files using Essentia.js and TensorFl
 | Mood & Energy Prediction | ✅ Yes (Machine Learning) | ❌ No | ✅ Yes |
 | Save Analysis History | ✅ Yes (Local Storage) | ❌ No | ✅ Yes |
 | Cost | 100% Free | Free (Ad-supported) | Paid Subscription |
-| Privacy / Processing | 100% Local (Browser) | Server/Cloud dependent | Server/Cloud dependent |
+| Privacy / Processing | 100% Local (Browser) | Local & Server/Cloud dependent | Local & Server/Cloud dependent |
 
 ## Technologies Used & Credits
 
