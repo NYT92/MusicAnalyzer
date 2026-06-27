@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Music Analyzer</title>
+    <script>
+        (function () {
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+                if (forcedTheme) return forcedTheme;
+                const storedTheme = getStoredTheme();
+                if (storedTheme) return storedTheme;
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+                if (pageTheme) return pageTheme;
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+                if (!themeSwitchers.length) return;
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                    element.setAttribute('aria-pressed', 'false');
+                });
+                for (const themeSwitcher of themeSwitchers) {
+                    const btnToActivate = themeSwitcher.querySelector('[data-bs-theme-value="' + theme + '"]');
+                    if (btnToActivate) {
+                        btnToActivate.classList.add('active');
+                        btnToActivate.setAttribute('aria-pressed', 'true');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+                document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
+                    toggle.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const theme = toggle.getAttribute('data-bs-theme-value');
+                        setStoredTheme(theme);
+                        setTheme(theme);
+                        showActiveTheme(theme);
+                    })
+                })
+            });
+        })();
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-body border-bottom py-2">
+        <div class="container-lg">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <svg class="bi me-2" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+                    <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
+                    <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+                </svg>
+                <span class="fw-semibold">Music Analyzer</span>
+            </a>
+            <div class="theme-switcher dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                    <svg class="bi" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16" data-bss-adaptable="true">
+                        <path
+                            d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                    </svg>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="#" data-bs-theme-value="light">Light</a>
+                    <a class="dropdown-item" href="#" data-bs-theme-value="dark">Dark</a>
+                    <a class="dropdown-item" href="#" data-bs-theme-value="auto">Auto</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-lg py-4">
+        <!-- Upload -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="card" id="upload-card">
+                    <div class="card-body">
+                        <div id="drop-zone">
+                            <svg class="bi mb-2" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                <path
+                                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                            </svg>
+                            <p class="mb-1 fw-medium" id="drop-label">Drop an audio file here or click to browse</p>
+                            <p class="text-muted small mb-0" id="file-name-display"></p>
+                        </div>
+                        <input type="file" accept="audio/*" id="audio-input" class="d-none">
+                        <button class="btn btn-primary w-100 mt-3" type="button" id="analyze-btn"
+                            disabled>Analyze</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-container" class="d-none">
+            <div class="text-center py-4">
+                <div class="spinner-border" role="status" style="width:2rem;height:2rem">
+                    <span class="visually-hidden">Analyzing...</span>
+                </div>
+                <p class="mt-2 text-muted mb-0">Analyzing audio...</p>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results-section" class="d-none">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-semibold" id="result-song-name">Results</h5>
+                            <button class="btn btn-sm btn-outline-secondary" id="save-btn" title="Save result">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2">
+                                        <path d="M6 4h10l4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2" />
+                                        <path d="M10 14a2 2 0 1 0 4 0a2 2 0 1 0-4 0m4-10v4H8V4" />
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <!-- Key stats -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-6 col-md-3">
+                                    <div class="stat-box text-center">
+                                        <div class="value-container" id="bpm-container">
+                                            <span class="spinner-border spinner-border-sm loading-indicator"
+                                                role="status"></span>
+                                            <div class="stat-value value-display" id="bpm" style="display:none">-</div>
+                                        </div>
+                                        <div class="stat-label">BPM</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="stat-box text-center">
+                                        <div class="value-container" id="keys-container">
+                                            <span class="spinner-border spinner-border-sm loading-indicator"
+                                                role="status"></span>
+                                            <div class="stat-value value-display" id="keys" style="display:none">-</div>
+                                        </div>
+                                        <div class="stat-label">Key</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="stat-box text-center">
+                                        <div class="value-container" id="camelot-container">
+                                            <span class="spinner-border spinner-border-sm loading-indicator"
+                                                role="status"></span>
+                                            <div class="stat-value value-display" id="camelot" style="display:none">-
+                                            </div>
+                                        </div>
+                                        <div class="stat-label">Camelot</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="stat-box text-center">
+                                        <div class="value-container" id="duration-container">
+                                            <span class="spinner-border spinner-border-sm loading-indicator"
+                                                role="status"></span>
+                                            <div class="stat-value value-display" id="duration" style="display:none">-
+                                            </div>
+                                        </div>
+                                        <div class="stat-label">Duration</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tempo -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-body-secondary">
+                                        <span class="badge bg-primary">Tempo</span>
+                                        <span class="fw-semibold" id="tempo-category">-</span>
+                                        <span class="text-muted small" id="tempo-confidence"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Moods -->
+                            <div>
+                                <h6 class="text-muted text-uppercase small fw-semibold mb-3">Mood Analysis</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="mood-item">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <small class="fw-medium">Danceability</small>
+                                                <small class="text-muted" id="danceability-pct">0%</small>
+                                            </div>
+                                            <div class="progress" style="height:10px">
+                                                <div class="progress-bar bg-success" id="danceability-value"
+                                                    style="width:0%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mood-item">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <small class="fw-medium">Aggressiveness</small>
+                                                <small class="text-muted" id="aggressive-pct">0%</small>
+                                            </div>
+                                            <div class="progress" style="height:10px">
+                                                <div class="progress-bar bg-danger" id="aggressive-value"
+                                                    style="width:0%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mood-item">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <small class="fw-medium">Happiness</small>
+                                                <small class="text-muted" id="happiness-pct">0%</small>
+                                            </div>
+                                            <div class="progress" style="height:10px">
+                                                <div class="progress-bar bg-warning" id="happiness-value"
+                                                    style="width:0%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History -->
+        <div id="history-section" class="d-none">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-semibold">History</h5>
+                            <button class="btn btn-sm btn-outline-danger" id="clear-history-btn">Clear All</button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Song</th>
+                                            <th>BPM</th>
+                                            <th>Key</th>
+                                            <th>Camelot</th>
+                                            <th>Dance</th>
+                                            <th>Happy</th>
+                                            <th>Aggr.</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-top mt-auto py-3">
+        <div class="container-lg text-center text-muted small">
+            <p>This is an university project practicum for <a href="https://rupp.edu.kh" target="_blank"
+                    rel="noopener">RUPP</a> ITE class.</p>
+            <p class="mb-1">Mood models by <a href="https://www.upf.edu/web/mtg" target="_blank" rel="noopener">Music
+                    Technology Group, UPF</a> (CC BY-NC-ND 4.0) &middot; Powered by <a href="https://essentia.upf.edu/"
+                    target="_blank" rel="noopener">Essentia.js</a> &middot; <a href="https://www.tensorflow.org/js"
+                    target="_blank" rel="noopener">TensorFlow.js</a> &middot; <a href="https://getbootstrap.com"
+                    target="_blank" rel="noopener">Bootstrap</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia-wasm.web.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia.js-core.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.5.0/dist/tf.min.js"></script>
+    <script src="/assets/lib/essentia.js-model.umd.js"></script>
+    <script src="/assets/lib/tf-backend-wasm-3.5.0.js"></script>
+    <script src="/assets/js/app.js"></script>
+</body>
+
+</html>
