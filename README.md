@@ -27,5 +27,3 @@ This project is made possible thanks to the following open-source technologies a
 * **[Essentia.js](https://essentia.upf.edu/essentiajs/)** - Used for core audio analysis, extracting features like BPM, key, and various other music descriptors. Essentia is an open-source library for audio and music analysis developed by the Music Technology Group (MTG) at Universitat Pompeu Fabra (UPF).
 * **[TensorFlow.js](https://www.tensorflow.org/js)** - Used to run machine learning models directly in the browser to predict moods (danceability, aggressiveness, happiness) based on the audio features extracted by Essentia.js.
 * **[Bootstrap 5](https://getbootstrap.com/)** - Used for the responsive layout, UI components, styling, and theme switching capabilities.
-* **[jQuery](https://jquery.com/)** - Used for DOM manipulation and simplifying JavaScript operations.
-* **[Google Fonts (Inter)](https://fonts.google.com/specimen/Inter)** - Used for the clean, modern typography throughout the application.
